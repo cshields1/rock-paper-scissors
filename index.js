@@ -6,6 +6,7 @@ const startButton = document.querySelector("button");
 startButton.addEventListener("click", () => game());
 
 function game() {
+  console.clear();
   while (playerScore < 5 && computerScore < 5) {
     playRound();
     console.log(result);
