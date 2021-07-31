@@ -2,12 +2,17 @@ let playerScore = 0;
 let computerScore = 0;
 let result = "";
 
+let abortGame = true;
+
+const weapons = ["rock", "paper", "scissors"];
+
 const startButton = document.querySelector("button");
 startButton.addEventListener("click", () => game());
 
 function game() {
   console.clear();
-  while (playerScore < 5 && computerScore < 5) {
+  abortGame = false;
+  while (playerScore < 5 && computerScore < 5 && !abortGame) {
     playRound();
     console.log(result);
     console.log(`Player: ${playerScore} | Computer: ${computerScore}`);
@@ -26,7 +31,13 @@ function game() {
 function playRound() {
   let playerSelection = getInput().toLowerCase();
   let computerSelection = computerChoice();
-  if (playerSelection === computerSelection) {
+  if (playerSelection === "quit") {
+    abortGame = true;
+  } else if (!weapons.includes(playerSelection)) {
+    result =
+      "Something went wrong. Make sure you enter rock, paper, or scissors!";
+    return result;
+  } else if (playerSelection === computerSelection) {
     result = "Draw! Try again.";
     return result;
   } else if (playerSelection === "rock" && computerSelection === "scissors") {
@@ -53,8 +64,6 @@ function playRound() {
     computerScore++;
     result = "You lose! Scissors beats paper.";
     return result;
-  } else {
-    return "Something went wrong. Make sure you enter rock, paper, or scissors!";
   }
 }
 
@@ -67,7 +76,6 @@ function getInput() {
 }
 
 function computerChoice() {
-  const weapons = ["rock", "paper", "scissors"];
   let i = Math.floor(Math.random() * 3);
   return weapons[i];
 }
@@ -76,4 +84,5 @@ function resetGame() {
   playerScore = 0;
   computerScore = 0;
   result = "";
+  abortGame = true;
 }
