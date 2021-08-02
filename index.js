@@ -10,7 +10,7 @@ const startButton = document.querySelector("button");
 startButton.addEventListener("click", () => game());
 
 function game() {
-  console.clear();
+  // console.clear();
   abortGame = false;
   while (playerScore < 5 && computerScore < 5 && !abortGame) {
     playRound();
