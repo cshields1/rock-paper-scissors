@@ -5,10 +5,6 @@ body {
   padding: 0;
 }
 
-.hide {
-  display: none;
-}
-
 button {
   background-color: rgba(192, 255, 190, 0.685);
   border: 2px solid black;
@@ -24,8 +20,12 @@ button {
   margin-bottom: 1rem;
 }
 
-#game-btns {
+.game-btns {
   display: flex;
   justify-content: center;
   flex: 1;
+}
+
+.hide {
+  display: none;
 }

@@ -1,6 +1,6 @@
 const initialState = document.querySelector("#initial-state");
 const gameState = document.querySelector("#game-state");
-const gameBtns = document.querySelector("#game-btns");
+const gameBtns = document.querySelector(".game-btns");
 const results = document.querySelector("#results");
 const newQuitBtns = document.querySelector("#new-quit-btns");
 const overallResults = document.querySelector("#overall-results");
