@@ -1,88 +1,108 @@
+const initialState = document.querySelector("#initial-state");
+const gameState = document.querySelector("#game-state");
+const gameBtns = document.querySelector("#game-btns");
+const results = document.querySelector("#results");
+const newQuitBtns = document.querySelector("#new-quit-btns");
+const overallResults = document.querySelector("#overall-results");
+const overallScores = document.querySelector("#overall-scores");
+
+const startButton = document.querySelector("#start-btn");
+const rockBtn = document.querySelector("#rock-btn");
+const paperBtn = document.querySelector("#paper-btn");
+const scissorsBtn = document.querySelector("#scissors-btn");
+const quitBtn = document.querySelector("#quit-btn");
+const newGameBtn = document.querySelector("#new-btn");
+
 let playerScore = 0;
 let computerScore = 0;
-let result = "";
+let overallScore = {
+  player: 0,
+  computer: 0,
+};
 
-let abortGame = true;
+startButton.addEventListener("click", () => startGame());
 
-const weapons = ["rock", "paper", "scissors"];
+rockBtn.addEventListener("click", () => playRound("ROCK"));
+paperBtn.addEventListener("click", () => playRound("PAPER"));
+scissorsBtn.addEventListener("click", () => playRound("SCISSORS"));
 
-const startButton = document.querySelector("button");
-startButton.addEventListener("click", () => game());
-
-function game() {
-  // console.clear();
-  abortGame = false;
-  while (playerScore < 5 && computerScore < 5 && !abortGame) {
-    playRound();
-    console.log(result);
-    console.log(`Player: ${playerScore} | Computer: ${computerScore}`);
-  }
-  let finalScore = `Final score: ${playerScore} to ${computerScore}`;
-  if (playerScore === computerScore) {
-    console.log("We have a tie!", finalScore);
-  } else if (playerScore > computerScore) {
-    console.warn("You won! Congratulations!", finalScore);
-  } else {
-    console.error("You lost! Better luck next time.", finalScore);
-  }
+quitBtn.addEventListener("click", () => {
+  startGame();
   resetGame();
-}
+});
 
-function playRound() {
-  let playerSelection = getInput().toLowerCase();
-  let computerSelection = computerChoice();
-  if (playerSelection === "quit") {
-    abortGame = true;
-  } else if (!weapons.includes(playerSelection)) {
-    result =
-      "Something went wrong. Make sure you enter rock, paper, or scissors!";
-    return result;
-  } else if (playerSelection === computerSelection) {
-    result = "Draw! Try again.";
-    return result;
-  } else if (playerSelection === "rock" && computerSelection === "scissors") {
+newGameBtn.addEventListener("click", () => {
+  newGameBtn.classList.toggle("hide");
+  gameBtns.classList.toggle("hide");
+  quitBtn.classList.toggle("hide");
+  resetGame();
+});
+
+function playRound(playerSelection) {
+  let computerSelection = chooseComputerSelection();
+
+  if (playerSelection === computerSelection) {
+    addResult(`Draw! Player: ${playerScore}, Computer: ${computerScore}`);
+  } else if (
+    (playerSelection === "ROCK" && computerSelection === "SCISSORS") ||
+    (playerSelection === "SCISSORS" && computerSelection === "PAPER") ||
+    (playerSelection === "PAPER" && computerSelection === "ROCK")
+  ) {
     playerScore++;
-    result = "You win! Rock beats scissors.";
-    return result;
-  } else if (playerSelection === "scissors" && computerSelection === "paper") {
-    playerScore++;
-    result = "You win! Scissors beats paper.";
-    return result;
-  } else if (playerSelection === "paper" && computerSelection === "rock") {
-    playerScore++;
-    result = "You win! Paper beats rock.";
-    return result;
-  } else if (playerSelection === "rock" && computerSelection === "paper") {
+    addResult(
+      `You win this round! ${playerSelection} beats ${computerSelection}. Player: ${playerScore}, Computer: ${computerScore}`
+    );
+  } else if (
+    (playerSelection === "ROCK" && computerSelection === "PAPER") ||
+    (playerSelection === "SCISSORS" && computerSelection === "ROCK") ||
+    (playerSelection === "PAPER" && computerSelection === "SCISSORS")
+  ) {
     computerScore++;
-    result = "You lose! Paper beats rock.";
-    return result;
-  } else if (playerSelection === "scissors" && computerSelection === "rock") {
-    computerScore++;
-    result = "You lose! Rock beats scissors.";
-    return result;
-  } else if (playerSelection === "paper" && computerSelection === "scissors") {
-    computerScore++;
-    result = "You lose! Scissors beats paper.";
-    return result;
+    addResult(
+      `You lose this round! ${computerSelection} beats ${playerSelection}. Player: ${playerScore}, Computer: ${computerScore}`
+    );
+  }
+
+  if (playerScore === 5 || computerScore === 5) {
+    gameBtns.classList.toggle("hide");
+    quitBtn.classList.toggle("hide");
+    newGameBtn.classList.toggle("hide");
+    let finalScore = `Final score: ${playerScore} to ${computerScore}`;
+    if (playerScore === computerScore) {
+      addResult(`We have a tie! ${finalScore}`);
+    } else if (playerScore > computerScore) {
+      addResult(`You won! Congratulations! ${finalScore}`);
+      overallScore.player++;
+    } else {
+      addResult(`You lost! Better luck next time. ${finalScore}`);
+      overallScore.computer++;
+    }
+    overallResults.classList.remove("hide");
+    overallScores.textContent = `Player: ${overallScore.player}, Computer: ${overallScore.computer}`;
   }
 }
 
-function getInput() {
-  let input = prompt("Choose your weapon!");
-  if (!input) {
-    return getInput();
-  }
-  return input;
-}
-
-function computerChoice() {
+function chooseComputerSelection() {
+  const weapons = ["ROCK", "PAPER", "SCISSORS"];
   let i = Math.floor(Math.random() * 3);
   return weapons[i];
+}
+
+function addResult(result) {
+  let newResult = document.createElement("p");
+  newResult.textContent = result;
+  results.appendChild(newResult);
+}
+
+function startGame() {
+  initialState.classList.toggle("hide");
+  gameState.classList.toggle("hide");
 }
 
 function resetGame() {
   playerScore = 0;
   computerScore = 0;
-  result = "";
-  abortGame = true;
+  while (results.firstChild) {
+    results.removeChild(results.firstChild);
+  }
 }
