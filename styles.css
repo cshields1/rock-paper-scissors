@@ -1,7 +1,14 @@
 body {
   background-color: rgb(218, 227, 255);
   text-align: center;
+  margin: 0;
+  padding: 0;
 }
+
+.hide {
+  display: none;
+}
+
 button {
   background-color: rgba(192, 255, 190, 0.685);
   border: 2px solid black;
@@ -11,10 +18,14 @@ button {
   font-weight: bold;
   margin: 1rem;
 }
-.hide {
-  display: none;
-}
+
 #overall-results {
   border-bottom: 1px solid black;
   margin-bottom: 1rem;
+}
+
+#game-btns {
+  display: flex;
+  justify-content: center;
+  flex: 1;
 }
